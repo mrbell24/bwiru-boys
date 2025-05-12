@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ef1212, #2575fc);
+           
+        
+        }
+        h1{
+            color: rgb(15, 228, 18);
+        }
+
+        table {
+            margin: 20px auto;
+            width: 80%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        input, button, select {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Smart Student Attendance System (2025)</h1>
+
+    <form id="attendance-form">
+        <input type="text" id="student-name" placeholder="Enter student name" required>
+        <select id="class">
+            <option value="Form One">Form One</option>
+            <option value="Form Two">Form Two</option>
+            <option value="Form Three">Form Three</option>
+            <option value="Form Four">Form Four</option>
+            <option value="Form Five">Form Five</option>
+            <option value="Form Six">Form Six</option>
+        </select>
+        <input type="date" id="date">
+        <button type="submit">Mark Attendance</button>
+    </form>
+
+    <h2>Attendance Records (2025)</h2>
+    <table id="attendance-table">
+        <tr>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Date</th>
+            <th>Present (✔️)</th>
+            <th>Absent (❌)</th>
+            <th>Admin Control</th>
+        </tr>
+    </table>
+
+    <script>
+        document.getElementById("attendance-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let studentName = document.getElementById("student-name").value;
+            let studentClass = document.getElementById("class").value;
+            let selectedDate = document.getElementById("date").value;
+
+            let table = document.getElementById("attendance-table");
+            let newRow = table.insertRow();
+
+            let nameCell = newRow.insertCell(0);
+            let classCell = newRow.insertCell(1);
+            let dateCell = newRow.insertCell(2);
+            let presentCell = newRow.insertCell(3);
+            let absentCell = newRow.insertCell(4);
+            let adminCell = newRow.insertCell(5);
+
+            nameCell.innerHTML = studentName;
+            classCell.innerHTML = studentClass;
+            dateCell.innerHTML = selectedDate;
+            presentCell.innerHTML = `<input type="checkbox" class="present-checkbox">`;
+            absentCell.innerHTML = `<input type="checkbox" class="absent-checkbox">`;
+            adminCell.innerHTML = `<button class="delete-btn">Delete</button>`;
+
+            document.getElementById("student-name").value = "";
+
+            let checkboxes = newRow.querySelectorAll("input[type='checkbox']");
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", function() {
+                    if (this.classList.contains("present-checkbox") && this.checked) {
+                        newRow.querySelector(".absent-checkbox").checked = false;
+                    } else if (this.classList.contains("absent-checkbox") && this.checked) {
+                        newRow.querySelector(".present-checkbox").checked = false;
+                    }
+                });
+            });
+
+            newRow.querySelector(".delete-btn").addEventListener("click", function() {
+                table.deleteRow(newRow.rowIndex);
+            });
+        });
+    </script>
+</body>
+</html>

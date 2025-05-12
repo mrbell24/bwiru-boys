@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Mkeka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            color: rgb(42, 42, 2);
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: medium;
+            background-color: azure;
+        }
+        h2{
+            background-color: rgb(210, 241, 13);
+            border-radius: 5px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        h1{
+            color: green;
+            
+        }
+    </style>
+</head>
+<body>
+    <marquee behavior="" direction="">
+
+        <h1>GET ALL CLASS RESULT PERFORMANCE OF STUDENTS IN BBTSS</h1>
+    </marquee>
+        <div class="container">
+        <h2>FORM ONE RESULT PERFORMANCE</h2>
+        <button onclick="addStudent()">Add Student</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="calculateClassAverage()">Calculate Class Average</button>
+        <h3 id="classAverage"></h3>
+    </div>
+
+    <script>
+        let students = [];
+
+        function addStudent() {
+            let name = prompt("Enter student name:");
+            let numSubjects = prompt("Enter number of subjects:");
+
+            let subjects = [];
+            let marks = [];
+            for (let i = 0; i < numSubjects; i++) {
+                let subjectName = prompt(`Enter name for subject ${i + 1}:`);
+                subjects.push(subjectName);
+                marks.push(parseInt(prompt(`Enter marks for ${subjectName}:`)) || 0);
+            }
+
+            let totalMarks = marks.reduce((sum, mark) => sum + mark, 0);
+            let average = totalMarks / marks.length;
+
+            let grade, division, comment;
+            if (average >= 80) {
+                grade = 'A';
+                division = 'Division I';
+                comment = 'Excellent performance!';
+            } else if (average >= 60) {
+                grade = 'B';
+                division = 'Division II';
+                comment = 'Good performance!';
+            } else if (average >= 40) {
+                grade = 'C';
+                division = 'Division III';
+                comment = 'Pass, but needs improvement.';
+            } else {
+                grade = 'F';
+                division = 'Fail';
+                comment = 'Failed, needs more effort.';
+            }
+
+            students.push({ name, subjects, marks, average, grade, division, comment });
+            updateTable();
+        }
+
+        function updateTable() {
+            students.sort((a, b) => b.average - a.average);
+            students.forEach((student, index) => student.position = index + 1);
+
+            const tableBody = document.querySelector('#resultsTable tbody');
+            tableBody.innerHTML = '';
+
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.subjects.join(", ")}</td>
+                        <td>${student.marks.join(", ")}</td>
+                        <td>${student.average.toFixed(2)}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.position}</td>
+                        <td>${student.division}</td>
+                        <td>${student.comment}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateClassAverage() {
+            let totalClassMarks = students.reduce((sum, student) => sum + student.average, 0);
+            let classAverage = totalClassMarks / students.length;
+            let finalComment = classAverage >= 50 ? "Overall performance is good." : "Needs improvement in overall performance.";
+
+            document.getElementById("classAverage").innerHTML = `Class Average: ${classAverage.toFixed(2)}<br>Final Comment: ${finalComment}`;
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM TWO RESULT MKEKA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background: linear-gradient(to right, #b0115e, #e60e0e);
+            background-color: brown;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: goldenrod;
+            border: #b0115e;
+        }
+        th, td {
+            border: 1px solid rgb(229, 202, 202);
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>FORM TWO RESULT PERFORMANCE</h2>
+        <button onclick="addStudent()">Add Student</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="calculateClassAverage()">Calculate Class Average</button>
+        <h3 id="classAverage"></h3>
+    </div>
+
+    <script>
+        let students = [];
+
+        function addStudent() {
+            let name = prompt("Enter student name:");
+            let numSubjects = prompt("Enter number of subjects:");
+
+            let subjects = [];
+            let marks = [];
+            for (let i = 0; i < numSubjects; i++) {
+                let subjectName = prompt(`Enter name for subject ${i + 1}:`);
+                subjects.push(subjectName);
+                marks.push(parseInt(prompt(`Enter marks for ${subjectName}:`)) || 0);
+            }
+
+            let totalMarks = marks.reduce((sum, mark) => sum + mark, 0);
+            let average = totalMarks / marks.length;
+
+            let grade, division, comment;
+            if (average >= 80) {
+                grade = 'A';
+                division = 'Division I';
+                comment = 'Excellent performance!';
+            } else if (average >= 60) {
+                grade = 'B';
+                division = 'Division II';
+                comment = 'Good performance!';
+            } else if (average >= 40) {
+                grade = 'C';
+                division = 'Division III';
+                comment = 'Pass, but needs improvement.';
+            } else {
+                grade = 'F';
+                division = 'Fail';
+                comment = 'Failed, needs more effort.';
+            }
+
+            students.push({ name, subjects, marks, average, grade, division, comment });
+            updateTable();
+        }
+
+        function updateTable() {
+            students.sort((a, b) => b.average - a.average);
+            students.forEach((student, index) => student.position = index + 1);
+
+            const tableBody = document.querySelector('#resultsTable tbody');
+            tableBody.innerHTML = '';
+
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.subjects.join(", ")}</td>
+                        <td>${student.marks.join(", ")}</td>
+                        <td>${student.average.toFixed(2)}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.position}</td>
+                        <td>${student.division}</td>
+                        <td>${student.comment}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateClassAverage() {
+            let totalClassMarks = students.reduce((sum, student) => sum + student.average, 0);
+            let classAverage = totalClassMarks / students.length;
+            let finalComment = classAverage >= 50 ? "Overall performance is good." : "Needs improvement in overall performance.";
+
+            document.getElementById("classAverage").innerHTML = `Class Average: ${classAverage.toFixed(2)}<br>Final Comment: ${finalComment}`;
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM THREE RESULT MKEKA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: brown;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>FORM THREE RESULT PERFORMANCE</h2>
+        <button onclick="addStudent()">Add Student</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="calculateClassAverage()">Calculate Class Average</button>
+        <h3 id="classAverage"></h3>
+    </div>
+
+    <script>
+        let students = [];
+
+        function addStudent() {
+            let name = prompt("Enter student name:");
+            let numSubjects = prompt("Enter number of subjects:");
+
+            let subjects = [];
+            let marks = [];
+            for (let i = 0; i < numSubjects; i++) {
+                let subjectName = prompt(`Enter name for subject ${i + 1}:`);
+                subjects.push(subjectName);
+                marks.push(parseInt(prompt(`Enter marks for ${subjectName}:`)) || 0);
+            }
+
+            let totalMarks = marks.reduce((sum, mark) => sum + mark, 0);
+            let average = totalMarks / marks.length;
+
+            let grade, division, comment;
+            if (average >= 80) {
+                grade = 'A';
+                division = 'Division I';
+                comment = 'Excellent performance!';
+            } else if (average >= 60) {
+                grade = 'B';
+                division = 'Division II';
+                comment = 'Good performance!';
+            } else if (average >= 40) {
+                grade = 'C';
+                division = 'Division III';
+                comment = 'Pass, but needs improvement.';
+            } else {
+                grade = 'F';
+                division = 'Fail';
+                comment = 'Failed, needs more effort.';
+            }
+
+            students.push({ name, subjects, marks, average, grade, division, comment });
+            updateTable();
+        }
+
+        function updateTable() {
+            students.sort((a, b) => b.average - a.average);
+            students.forEach((student, index) => student.position = index + 1);
+
+            const tableBody = document.querySelector('#resultsTable tbody');
+            tableBody.innerHTML = '';
+
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.subjects.join(", ")}</td>
+                        <td>${student.marks.join(", ")}</td>
+                        <td>${student.average.toFixed(2)}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.position}</td>
+                        <td>${student.division}</td>
+                        <td>${student.comment}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateClassAverage() {
+            let totalClassMarks = students.reduce((sum, student) => sum + student.average, 0);
+            let classAverage = totalClassMarks / students.length;
+            let finalComment = classAverage >= 50 ? "Overall performance is good." : "Needs improvement in overall performance.";
+
+            document.getElementById("classAverage").innerHTML = `Class Average: ${classAverage.toFixed(2)}<br>Final Comment: ${finalComment}`;
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM FOUR RESULT MKEKA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: brown;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>FORM FOUR RESULT PERFORMANCE</h2>
+        <button onclick="addStudent()">Add Student</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="calculateClassAverage()">Calculate Class Average</button>
+        <h3 id="classAverage"></h3>
+    </div>
+
+    <script>
+        let students = [];
+
+        function addStudent() {
+            let name = prompt("Enter student name:");
+            let numSubjects = prompt("Enter number of subjects:");
+
+            let subjects = [];
+            let marks = [];
+            for (let i = 0; i < numSubjects; i++) {
+                let subjectName = prompt(`Enter name for subject ${i + 1}:`);
+                subjects.push(subjectName);
+                marks.push(parseInt(prompt(`Enter marks for ${subjectName}:`)) || 0);
+            }
+
+            let totalMarks = marks.reduce((sum, mark) => sum + mark, 0);
+            let average = totalMarks / marks.length;
+
+            let grade, division, comment;
+            if (average >= 80) {
+                grade = 'A';
+                division = 'Division I';
+                comment = 'Excellent performance!';
+            } else if (average >= 60) {
+                grade = 'B';
+                division = 'Division II';
+                comment = 'Good performance!';
+            } else if (average >= 40) {
+                grade = 'C';
+                division = 'Division III';
+                comment = 'Pass, but needs improvement.';
+            } else {
+                grade = 'F';
+                division = 'Fail';
+                comment = 'Failed, needs more effort.';
+            }
+
+            students.push({ name, subjects, marks, average, grade, division, comment });
+            updateTable();
+        }
+
+        function updateTable() {
+            students.sort((a, b) => b.average - a.average);
+            students.forEach((student, index) => student.position = index + 1);
+
+            const tableBody = document.querySelector('#resultsTable tbody');
+            tableBody.innerHTML = '';
+
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.subjects.join(", ")}</td>
+                        <td>${student.marks.join(", ")}</td>
+                        <td>${student.average.toFixed(2)}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.position}</td>
+                        <td>${student.division}</td>
+                        <td>${student.comment}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateClassAverage() {
+            let totalClassMarks = students.reduce((sum, student) => sum + student.average, 0);
+            let classAverage = totalClassMarks / students.length;
+            let finalComment = classAverage >= 50 ? "Overall performance is good." : "Needs improvement in overall performance.";
+
+            document.getElementById("classAverage").innerHTML = `Class Average: ${classAverage.toFixed(2)}<br>Final Comment: ${finalComment}`;
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM FIVE RESULT MKEKA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: brown;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>FORM FIVE RESULT PERFORMANCE</h2>
+        <button onclick="addStudent()">Add Student</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="calculateClassAverage()">Calculate Class Average</button>
+        <h3 id="classAverage"></h3>
+    </div>
+
+    <script>
+        let students = [];
+
+        function addStudent() {
+            let name = prompt("Enter student name:");
+            let numSubjects = prompt("Enter number of subjects:");
+
+            let subjects = [];
+            let marks = [];
+            for (let i = 0; i < numSubjects; i++) {
+                let subjectName = prompt(`Enter name for subject ${i + 1}:`);
+                subjects.push(subjectName);
+                marks.push(parseInt(prompt(`Enter marks for ${subjectName}:`)) || 0);
+            }
+
+            let totalMarks = marks.reduce((sum, mark) => sum + mark, 0);
+            let average = totalMarks / marks.length;
+
+            let grade, division, comment;
+            if (average >= 80) {
+                grade = 'A';
+                division = 'Division I';
+                comment = 'Excellent performance!';
+            } else if (average >= 60) {
+                grade = 'B';
+                division = 'Division II';
+                comment = 'Good performance!';
+            } else if (average >= 40) {
+                grade = 'C';
+                division = 'Division III';
+                comment = 'Pass, but needs improvement.';
+            } else {
+                grade = 'F';
+                division = 'Fail';
+                comment = 'Failed, needs more effort.';
+            }
+
+            students.push({ name, subjects, marks, average, grade, division, comment });
+            updateTable();
+        }
+
+        function updateTable() {
+            students.sort((a, b) => b.average - a.average);
+            students.forEach((student, index) => student.position = index + 1);
+
+            const tableBody = document.querySelector('#resultsTable tbody');
+            tableBody.innerHTML = '';
+
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.subjects.join(", ")}</td>
+                        <td>${student.marks.join(", ")}</td>
+                        <td>${student.average.toFixed(2)}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.position}</td>
+                        <td>${student.division}</td>
+                        <td>${student.comment}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateClassAverage() {
+            let totalClassMarks = students.reduce((sum, student) => sum + student.average, 0);
+            let classAverage = totalClassMarks / students.length;
+            let finalComment = classAverage >= 50 ? "Overall performance is good." : "Needs improvement in overall performance.";
+
+            document.getElementById("classAverage").innerHTML = `Class Average: ${classAverage.toFixed(2)}<br>Final Comment: ${finalComment}`;
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM SIX RESULT MKEKA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: brown;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>FORM SIX RESULT PERFORMANCE</h2>
+        <button onclick="addStudent()">Add Student</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Subjects</th>
+                    <th>Marks</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                    <th>Division</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="calculateClassAverage()">Calculate Class Average</button>
+        <h3 id="classAverage"></h3>
+    </div>
+
+    <script>
+        let students = [];
+
+        function addStudent() {
+            let name = prompt("Enter student name:");
+            let numSubjects = prompt("Enter number of subjects:");
+
+            let subjects = [];
+            let marks = [];
+            for (let i = 0; i < numSubjects; i++) {
+                let subjectName = prompt(`Enter name for subject ${i + 1}:`);
+                subjects.push(subjectName);
+                marks.push(parseInt(prompt(`Enter marks for ${subjectName}:`)) || 0);
+            }
+
+            let totalMarks = marks.reduce((sum, mark) => sum + mark, 0);
+            let average = totalMarks / marks.length;
+
+            let grade, division, comment;
+            if (average >= 80) {
+                grade = 'A';
+                division = 'Division I';
+                comment = 'Excellent performance!';
+            } else if (average >= 60) {
+                grade = 'B';
+                division = 'Division II';
+                comment = 'Good performance!';
+            } else if (average >= 40) {
+                grade = 'C';
+                division = 'Division III';
+                comment = 'Pass, but needs improvement.';
+            } else {
+                grade = 'F';
+                division = 'Fail';
+                comment = 'Failed, needs more effort.';
+            }
+
+            students.push({ name, subjects, marks, average, grade, division, comment });
+            updateTable();
+        }
+
+        function updateTable() {
+            students.sort((a, b) => b.average - a.average);
+            students.forEach((student, index) => student.position = index + 1);
+
+            const tableBody = document.querySelector('#resultsTable tbody');
+            tableBody.innerHTML = '';
+
+            students.forEach(student => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.subjects.join(", ")}</td>
+                        <td>${student.marks.join(", ")}</td>
+                        <td>${student.average.toFixed(2)}</td>
+                        <td>${student.grade}</td>
+                        <td>${student.position}</td>
+                        <td>${student.division}</td>
+                        <td>${student.comment}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculateClassAverage() {
+            let totalClassMarks = students.reduce((sum, student) => sum + student.average, 0);
+            let classAverage = totalClassMarks / students.length;
+            let finalComment = classAverage >= 50 ? "Overall performance is good." : "Needs improvement in overall performance.";
+
+            document.getElementById("classAverage").innerHTML = `Class Average: ${classAverage.toFixed(2)}<br>Final Comment: ${finalComment}`;
+        }
+    </script>
+</body>
+</html>
+
