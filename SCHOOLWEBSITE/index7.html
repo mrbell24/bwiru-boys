@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Package System (Manage Files)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background: linear-gradient(to right, #7f0d46, #020f28);
+            text-align: center;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        .classes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .class-box {
+            width: 30%;
+            padding: 20px;
+            margin: 10px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            color: #28a745;
+        }
+
+        .package-form input, .package-form button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .package-form button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .package-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+            padding: 5px;
+            border: none;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .file-list {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Home Package Submission & Viewing</h2>
+
+    <div class="classes-container" id="classesContainer">
+        <!-- Forms for each class will be generated here -->
+    </div>
+
+    <h3>Submitted Packages per Class:</h3>
+    <div id="submittedPackagesContainer" class="class-section"></div>
+
+    <script>
+        let submittedPackages = JSON.parse(localStorage.getItem("submittedPackages")) || {
+            "Form 1": [], "Form 2": [], "Form 3": [], "Form 4": [], "Form 5": [], "Form 6": []
+        };
+
+        function createSubmissionForms() {
+            let container = document.getElementById("classesContainer");
+            container.innerHTML = "";
+
+            Object.keys(submittedPackages).forEach(className => {
+                let formHtml = `
+                    <div class="class-box">
+                        <h3>${className}</h3>
+                        <form class="package-form" data-class="${className}">
+                            <label>Teacher's Name:</label>
+                            <input type="text" id="teacherName_${className}" required>
+                            <label>Subject:</label>
+                            <input type="text" id="subject_${className}" required>
+                            <label>Upload File:</label>
+                            <input type="file" id="fileUpload_${className}" required>
+                            <button type="button" onclick="submitPackage('${className}')">Submit</button>
+                        </form>
+                        <div id="submitted_${className}" class="file-list"></div>
+                    </div>
+                `;
+                container.innerHTML += formHtml;
+            });
+        }
+
+        function submitPackage(className) {
+            let teacherName = document.getElementById(`teacherName_${className}`).value;
+            let subject = document.getElementById(`subject_${className}`).value;
+            let file = document.getElementById(`fileUpload_${className}`).files[0];
+
+            if (!file) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            let fileUrl = URL.createObjectURL(file);
+
+            let packageInfo = {
+                teacher: teacherName,
+                subject: subject,
+                fileName: file.name,
+                fileUrl: fileUrl
+            };
+
+            submittedPackages[className].push(packageInfo);
+            localStorage.setItem("submittedPackages", JSON.stringify(submittedPackages));
+
+            alert("Home package submitted successfully!");
+            displaySubmittedPackages();
+            document.getElementById(`teacherName_${className}`).value = "";
+            document.getElementById(`subject_${className}`).value = "";
+            document.getElementById(`fileUpload_${className}`).value = "";
+        }
+
+        function displaySubmittedPackages() {
+            Object.keys(submittedPackages).forEach(className => {
+                let container = document.getElementById(`submitted_${className}`);
+                container.innerHTML = `<h4>${className} - Submitted Packages</h4><ul>${submittedPackages[className].map((pkg, index) => 
+                    `<li>${pkg.teacher} (${pkg.subject}): ${pkg.fileName} 
+                    <a href="${pkg.fileUrl}" target="_blank">[View]</a>
+                    <button class="delete-btn" onclick="deletePackage('${className}', ${index})">Delete</button>
+                    </li>`).join('')}</ul>`;
+            });
+        }
+
+        function deletePackage(className, index) {
+            submittedPackages[className].splice(index, 1);
+            localStorage.setItem("submittedPackages", JSON.stringify(submittedPackages));
+            displaySubmittedPackages();
+            alert("File deleted successfully!");
+        }
+
+        createSubmissionForms();
+        displaySubmittedPackages();
+
+    </script>
+</body>
+</html>
